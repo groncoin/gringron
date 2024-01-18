@@ -1,0 +1,36 @@
+[package]
+name = "gringron_gen_gen"
+version = "0.0.1"
+edition = "2018"
+authors = ["GrinGron Developers <mimblewimble@lists.launchpad.net>"]
+description = "Utility to automate the generation of GrinGron's genesis block"
+license = "Apache-2.0"
+repository = "https://github.com/groncoin/gringron"
+keywords = [ "crypto", "gringron", "mimblewimble" ]
+readme = "README.md"
+
+[[bin]]
+name = "gen_gen"
+path = "src/bin/gen_gen.rs"
+
+[dependencies]
+chrono = "0.4.4"
+cuckoo_miner = "1.0.0"
+curl = "0.4.19"
+gringron_core = { path = "../../core" }
+gringron_chain = { path = "../../chain" }
+gringron_keychain = { path = "../../keychain" }
+gringron_miner_plugin = "1.0.0"
+gringron_store = { path = "../../store" }
+gringron_util = { path = "../../util" }
+gringron_wallet = { path = "../../wallet" }
+rpassword = "2.0.0"
+serde_json = "1"
+
+[patch.crates-io]
+gringron_api = { path = "../../api" }
+gringron_core = { path = "../../core" }
+gringron_chain = { path = "../../chain" }
+gringron_keychain = { path = "../../keychain" }
+gringron_util = { path = "../../util" }
+gringron_wallet = { path = "../../wallet" }
