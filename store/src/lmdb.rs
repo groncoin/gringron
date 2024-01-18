@@ -14,6 +14,7 @@
 
 //! Storage of core types using LMDB.
 
+use std::fmt;
 use std::fs;
 use std::sync::Arc;
 
@@ -35,24 +36,57 @@ const RESIZE_PERCENT: f32 = 0.9;
 const RESIZE_MIN_TARGET_PERCENT: f32 = 0.65;
 
 /// Main error type for this lmdb
-#[derive(Clone, Eq, PartialEq, Debug, thiserror::Error)]
+// #[derive(Clone, Eq, PartialEq, Debug, thiserror::Error)]
+// pub enum Error {
+// 	/// Couldn't find what we were looking for
+// 	#[error("DB Not Found Error: {0}")]
+// 	NotFoundErr(String),
+// 	/// Wraps an error originating from LMDB
+// 	#[error("LMDB error: {0}")]
+// 	LmdbErr(lmdb::error::Error),
+// 	/// Wraps a serialization error for Writeable or Readable
+// 	#[error("Serialization Error: {0}")]
+// 	SerErr(ser::Error),
+// 	/// File handling error
+// 	#[error("File handling Error: {0}")]
+// 	FileErr(String),
+// 	/// Other error
+// 	#[error("Other Error: {0}")]
+// 	OtherErr(String),
+// }
+
+#[derive(Clone, Eq, PartialEq, Debug)]
 pub enum Error {
 	/// Couldn't find what we were looking for
-	#[error("DB Not Found Error: {0}")]
+	// #[error("DB Not Found Error: {0}")]
 	NotFoundErr(String),
 	/// Wraps an error originating from LMDB
-	#[error("LMDB error: {0}")]
+	// #[error("LMDB error: {0}")]
 	LmdbErr(lmdb::error::Error),
 	/// Wraps a serialization error for Writeable or Readable
-	#[error("Serialization Error: {0}")]
+	// #[error("Serialization Error: {0}")]
 	SerErr(ser::Error),
 	/// File handling error
-	#[error("File handling Error: {0}")]
+	// #[error("File handling Error: {0}")]
 	FileErr(String),
 	/// Other error
-	#[error("Other Error: {0}")]
+	// #[error("Other Error: {0}")]
 	OtherErr(String),
 }
+
+impl fmt::Display for Error {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		match self {
+			Self::NotFoundErr(err) => write!(f, "DB Not Found Error:: {}", err),
+			Self::LmdbErr(err) => write!(f, "LMDB error: {}", err),
+			Self::SerErr(err) => write!(f, "Serialization Error: {}", err),
+			Self::FileErr(err) => write!(f, "File handling Error: {}", err),
+			Self::OtherErr(err) => write!(f, "Other Error: {}", err),
+		}
+	}
+}
+
+impl std::error::Error for Error {}
 
 impl From<lmdb::error::Error> for Error {
 	fn from(e: lmdb::error::Error) -> Error {
